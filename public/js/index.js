@@ -1,5 +1,60 @@
 let transactions = [];
 let myChart;
+//import  {checkForIndexedDb,useIndexedDb} from './indexedDb';
+function checkForIndexedDb() {
+  if (!window.indexedDB) {
+    console.log("Your browser doesn't support a stable version of IndexedDB.");
+    return false;
+  }
+  return true;
+}
+
+function useIndexedDb(databaseName, storeName, method, object) {
+
+  console.log(object)
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(databaseName, 1);
+    let db,
+      tx,
+      store;
+
+    request.onupgradeneeded = function(e) {
+      const db = request.result;
+      db.createObjectStore(storeName, { 
+        keyPath: "_id",
+        autoIncrement: true});
+    };
+
+    request.onerror = function(e) {
+      console.log("There was an error");
+    };
+
+    request.onsuccess = function(e) {
+      db = request.result;
+      tx = db.transaction(storeName, "readwrite");
+      store = tx.objectStore(storeName);
+
+      db.onerror = function(e) {
+        console.log("error");
+      };
+      if (method === "put") {
+        store.put(object);
+      } else if (method === "get") {
+        const all = store.getAll();
+        all.onsuccess = function() {
+          resolve(all.result);
+        };
+      } else if (method === "delete") {
+        store.delete(object._id);
+      }
+      tx.oncomplete = function() {
+        db.close();
+      };
+    };
+  });
+}
+
+
 
 fetch("/api/transaction")
   .then(response => {
@@ -99,10 +154,19 @@ function sendTransaction(isAdding) {
     date: new Date().toISOString()
   };
 
+  function saveRecord (transaction) {
+    /* here we have to open an IndexDB connction and save the transactions
+    the saveRecord only hits when there is an error and the mongoDB is not connected
+    in addtion we will need to create a new DB each time */
+  if(checkForIndexedDb){
+    useIndexedDb("localBudgetDB", "transactions", "put", transaction);
+  }
+
   // if subtracting funds, convert amount to negative number
   if (!isAdding) {
     transaction.value *= -1;
   }
+}
 
   // add to beginning of current array of data
   transactions.unshift(transaction);

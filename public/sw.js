@@ -3,8 +3,8 @@ const staticCache = "site-static-v2";
 const assets = [
   "/",
   "/index.html",
-  "/index.js",
-  "/styles.css",
+  "/js/index.js",
+  "/css/styles.css",
 ];
 
 self.addEventListener("install", (evt) => {
