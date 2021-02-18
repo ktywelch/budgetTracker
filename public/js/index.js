@@ -9,9 +9,8 @@ function checkForIndexedDb() {
   return true;
 }
 
+//This has all the transactions that indexDB uses
 function useIndexedDb(databaseName, storeName, method, object) {
-
-  console.log(object)
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(databaseName, 1);
     let db,
@@ -54,6 +53,45 @@ function useIndexedDb(databaseName, storeName, method, object) {
   });
 }
 
+function checkUploadIndexDB(databaseName,storeName) {
+    useIndexedDb(databaseName, storeName, "get", "all")
+    .then(response => {
+      //console.log(response.length);
+      /* this will push any entries to if the system is online and put them in mongo
+      and romove the Db when the bulk upload is done - this means we should not have to track the 
+      versions of the DB */
+      var bulkCreate =[];
+      response.forEach(element => {
+        let newE = {
+          "name": element.name,
+          "date": element.date,
+          "value": element.value,
+        }
+        bulkCreate.push(newE);
+      });
+      fetch("/api/transaction/bulk", {
+        method: "POST",
+        body: JSON.stringify(bulkCreate),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => {    
+        console.log(response);
+        // remove the database if when the bulk add is done
+
+        var req = window.indexedDB.deleteDatabase(databaseName);
+        req.onsuccess = function () {
+        console.log("Deleted database successfully");
+         };
+        req.onerror = function () {
+        console.log("Couldn't delete database");
+        };
+     })
+    .catch(err => console.log(err))
+  })
+ }
 
 
 fetch("/api/transaction")
@@ -63,7 +101,7 @@ fetch("/api/transaction")
   .then(data => {
     // save db data on global variable
     transactions = data;
-
+    checkUploadIndexDB("localBudgetDB", "transactions");
     populateTotal();
     populateTable();
     populateChart();
@@ -155,9 +193,6 @@ function sendTransaction(isAdding) {
   };
 
   function saveRecord (transaction) {
-    /* here we have to open an IndexDB connction and save the transactions
-    the saveRecord only hits when there is an error and the mongoDB is not connected
-    in addtion we will need to create a new DB each time */
   if(checkForIndexedDb){
     useIndexedDb("localBudgetDB", "transactions", "put", transaction);
   }
