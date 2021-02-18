@@ -1,6 +1,7 @@
 body {
   font-size: 120%;
   font-family: Arial;
+  background: black;
 }
 
 button, input {
@@ -27,6 +28,7 @@ tr:nth-child(even) {
 }
 
 .wrapper {
+  background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
   margin: 0 auto;
   max-width: 825px;
   text-align: center;
