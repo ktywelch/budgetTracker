@@ -153,14 +153,6 @@ function sendTransaction(isAdding) {
     nameEl.value = "";
     amountEl.value = "";
   });
-
-  // // add to beginning of current array of data
-  // transactions.unshift(transaction);
-
-  // // re-run logic to populate ui with new record
-  // populateChart();
-  // populateTable();
-  // populateTotal();
   
   }
 
@@ -264,6 +256,7 @@ function checkUploadIndexDB(databaseName,storeName) {
         req.onerror = function () {
         console.log("Couldn't delete database");
         };
+        location.reload(); 
      })
     .catch(err => console.log(err))
   })
