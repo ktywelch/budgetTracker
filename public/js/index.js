@@ -246,17 +246,16 @@ function checkUploadIndexDB(databaseName,storeName) {
         }
       })
       .then(response => {    
-        console.log(response);
         // remove the database if when the bulk add is done
-
         var req = window.indexedDB.deleteDatabase(databaseName);
         req.onsuccess = function () {
         console.log("Deleted database successfully");
+        location.reload(); 
          };
         req.onerror = function () {
         console.log("Couldn't delete database");
         };
-        location.reload(); 
+    
      })
     .catch(err => console.log(err))
   })
