@@ -250,7 +250,6 @@ function checkUploadIndexDB(databaseName,storeName) {
         var req = window.indexedDB.deleteDatabase(databaseName);
         req.onsuccess = function () {
         console.log("Deleted database successfully");
-        location.reload(); 
          };
         req.onerror = function () {
         console.log("Couldn't delete database");
