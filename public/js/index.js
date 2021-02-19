@@ -1,8 +1,9 @@
 let transactions = [];
 let myChart;
 
+getAndShowTransactions() 
 
-
+function getAndShowTransactions() {
 fetch("/api/transaction")
   .then(response => {
     return response.json();
@@ -22,8 +23,8 @@ fetch("/api/transaction")
   
   document.querySelector("#sub-btn").onclick = function() {
     sendTransaction(false);
-  };
-  
+  }; 
+}
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
@@ -254,7 +255,9 @@ function checkUploadIndexDB(databaseName,storeName) {
         req.onerror = function () {
         console.log("Couldn't delete database");
         };
-    
+        populateChart();
+        populateTable();
+        populateTotal();
      })
     .catch(err => console.log(err))
   })

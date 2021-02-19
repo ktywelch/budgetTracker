@@ -4,7 +4,7 @@ The BudgetTrakcer application utilizes a mongo database and mongoose and code pr
 expense through a budget tracking application. If the application goes offline the user will still be able to enter items and when the system comes back online
 the entries will be added to the  mongo db server when the connection is reestablished.
 
-[Budget tracker application can be found on github repository ](https://github.com/ktywelch/FitnessTracker)
+[Budget tracker application can be found on github repository ](https://github.com/ktywelch/budgetTracker)
 
 ## Table of contents
 * [Design](#Design)
@@ -17,15 +17,15 @@ the entries will be added to the  mongo db server when the connection is reestab
 ## Design
 The design utilizes a server, controllers, DB and that utilize express and mongoose to create a web site that will  allow the user to track budget in a database and chart the entires.
 
-The application is deployed on [Heroku at fitnesstracker-kw.herokuapp.com](https://fitnesstracker-kw.herokuapp.com).
+The application is deployed on [Heroku at budgettrak-kw.herokuapp.com](https://budgettrak-kw.herokuapp.com/).
 
 ## Database:
 
-Is is NoSQL DB that utilizes a collection with a date and an array to trace the exercises associated with each workout. 
+Is is NoSQL DB that creates and utilizes a transactions collection to track budget items.  
 
 
 ## Installation
-Assumptions prior to installation that the user has installed MongoDB community edition and installed and is familiar with starting MongoDB services. For additional details on install MySQL and tools please refer to the [MongoDB Community Edition site.](https://www.mongodb.com/try/download/community) 
+Assumptions prior to installation that the user has installed MongoDB community edition and installed and is familiar with starting MongoDB services. For additional details on install MongoDB and tools please refer to the [MongoDB Community Edition site.](https://www.mongodb.com/try/download/community) 
 
 The installation process is a download of git source, using npm install to install required modules based on the package.json file included in the same directory as the application.
 
